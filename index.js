@@ -154,8 +154,8 @@ addEmployee = function(){
             // make query and insert answers as values
             connection.query(employee,[answers.firstname, answers.lastname, answers.job], function(err, res){
                 if (err) throw err;
-                    
-                menuExit();
+                getEmployees();    
+                
 
             });
         });
@@ -194,7 +194,7 @@ addRole = function(){
             connection.query(role, [answers.title, answers.salary, answers.branch], function(err, res){
                 if (err) throw err;
 
-                menuExit();
+                getRoles();
                     
             });
         });
@@ -220,7 +220,7 @@ addDepartment = function(){
         connection.query(employee,[answers.depname], function(err, res){
             if (err) throw err;
 
-                menuExit();
+            getDepartments();
                 
         });
     });
@@ -258,7 +258,7 @@ changeRole = function(){
                 connection.query(newRole, [answer.role, answer.who], function (err, res){
                     if (err) throw err;
                         
-                    menuExit();
+                    getRoles();
                 })
             })
         })
