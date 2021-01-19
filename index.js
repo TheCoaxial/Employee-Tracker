@@ -96,7 +96,21 @@ getEmployees = function(){
     connection.query("SELECT * FROM employee", (err, res) =>{
         if (err) throw err;
         console.table(res)
-        begin();
+            
+        inquirer.prompt([
+            {
+                name: "search",
+                type: "list",
+                message: "Would you like to do something else, or exit?",
+                choices: ["menu" ,"quit"]
+            }
+        ]).then(function(answers){
+            if(answers.search === "menu"){
+                begin();
+            } else{
+                connection.end();
+            }
+        })
     })
 
 };
@@ -106,7 +120,21 @@ getRoles = function(){
     connection.query("SELECT * FROM role", (err, res) =>{
         if (err) throw err;
         console.table(res)
-        begin();
+            
+        inquirer.prompt([
+            {
+                name: "search",
+                type: "list",
+                message: "Would you like to do something else, or exit?",
+                choices: ["menu" ,"quit"]
+            }
+        ]).then(function(answers){
+            if(answers.search === "menu"){
+                begin();
+            } else{
+                connection.end();
+            }
+        })
     })
 };
 
@@ -115,7 +143,21 @@ getDepartments = function(){
     connection.query("SELECT * FROM department", (err, res) =>{
         if (err) throw err;
         console.table(res)
-        begin();
+            
+        inquirer.prompt([
+            {
+                name: "search",
+                type: "list",
+                message: "Would you like to do something else, or exit?",
+                choices: ["menu" ,"quit"]
+            }
+        ]).then(function(answers){
+            if(answers.search === "menu"){
+                begin();
+            } else{
+                connection.end();
+            }
+        })
     })
 };
 
@@ -150,7 +192,21 @@ addEmployee = function(){
             // make query and insert answers as values
             connection.query(employee,[answers.firstname, answers.lastname, answers.job], function(err, res){
                 if (err) throw err;
-                begin();
+                    
+                inquirer.prompt([
+                    {
+                        name: "search",
+                        type: "list",
+                        message: "Would you like to do something else, or exit?",
+                        choices: ["menu" ,"quit"]
+                    }
+                ]).then(function(answers){
+                    if(answers.search === "menu"){
+                        begin();
+                    } else{
+                        connection.end();
+                    }
+                })
             });
         });
     });
@@ -187,7 +243,22 @@ addRole = function(){
             //Make query and insert answers as values
             connection.query(role, [answers.title, answers.salary, answers.branch], function(err, res){
                 if (err) throw err;
-                begin();
+
+                inquirer.prompt([
+                    {
+                        name: "search",
+                        type: "list",
+                        message: "Would you like to do something else, or exit?",
+                        choices: ["menu" ,"quit"]
+                    }
+                ]).then(function(answers){
+                    if(answers.search === "menu"){
+                        begin();
+                    } else{
+                        connection.end();
+                    }
+                })
+                    
             });
         });
     });
@@ -211,7 +282,22 @@ addDepartment = function(){
         //Make query and insert answers as values
         connection.query(employee,[answers.depname], function(err, res){
             if (err) throw err;
-            begin();
+
+                inquirer.prompt([
+                    {
+                        name: "search",
+                        type: "list",
+                        message: "Would you like to do something else, or exit?",
+                        choices: ["menu" ,"quit"]
+                    }
+                ]).then(function(answers){
+                    if(answers.search === "menu"){
+                        begin();
+                    } else{
+                        connection.end();
+                    }
+                })
+                
         });
     });
     
@@ -247,7 +333,21 @@ changeRole = function(){
                 //Make query and update employee table with answers values
                 connection.query(newRole, [answer.role, answer.who], function (err, res){
                     if (err) throw err;
-                    begin();
+                        
+                    inquirer.prompt([
+                        {
+                            name: "search",
+                            type: "list",
+                            message: "Would you like to do something else, or exit?",
+                            choices: ["menu" ,"quit"]
+                        }
+                    ]).then(function(answers){
+                        if(answers.search === "menu"){
+                            begin();
+                        } else{
+                            connection.end();
+                        }
+                    })
                 })
             })
         })
