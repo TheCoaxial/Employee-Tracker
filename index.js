@@ -96,21 +96,9 @@ getEmployees = function(){
     connection.query("SELECT * FROM employee", (err, res) =>{
         if (err) throw err;
         console.table(res)
-            
-        inquirer.prompt([
-            {
-                name: "search",
-                type: "list",
-                message: "Would you like to do something else, or exit?",
-                choices: ["menu" ,"quit"]
-            }
-        ]).then(function(answers){
-            if(answers.search === "menu"){
-                begin();
-            } else{
-                connection.end();
-            }
-        })
+       
+        menuExit();
+       
     })
 
 };
@@ -121,20 +109,7 @@ getRoles = function(){
         if (err) throw err;
         console.table(res)
             
-        inquirer.prompt([
-            {
-                name: "search",
-                type: "list",
-                message: "Would you like to do something else, or exit?",
-                choices: ["menu" ,"quit"]
-            }
-        ]).then(function(answers){
-            if(answers.search === "menu"){
-                begin();
-            } else{
-                connection.end();
-            }
-        })
+        menuExit();
     })
 };
 
@@ -144,20 +119,7 @@ getDepartments = function(){
         if (err) throw err;
         console.table(res)
             
-        inquirer.prompt([
-            {
-                name: "search",
-                type: "list",
-                message: "Would you like to do something else, or exit?",
-                choices: ["menu" ,"quit"]
-            }
-        ]).then(function(answers){
-            if(answers.search === "menu"){
-                begin();
-            } else{
-                connection.end();
-            }
-        })
+        menuExit();
     })
 };
 
@@ -193,20 +155,8 @@ addEmployee = function(){
             connection.query(employee,[answers.firstname, answers.lastname, answers.job], function(err, res){
                 if (err) throw err;
                     
-                inquirer.prompt([
-                    {
-                        name: "search",
-                        type: "list",
-                        message: "Would you like to do something else, or exit?",
-                        choices: ["menu" ,"quit"]
-                    }
-                ]).then(function(answers){
-                    if(answers.search === "menu"){
-                        begin();
-                    } else{
-                        connection.end();
-                    }
-                })
+                menuExit();
+
             });
         });
     });
@@ -244,20 +194,7 @@ addRole = function(){
             connection.query(role, [answers.title, answers.salary, answers.branch], function(err, res){
                 if (err) throw err;
 
-                inquirer.prompt([
-                    {
-                        name: "search",
-                        type: "list",
-                        message: "Would you like to do something else, or exit?",
-                        choices: ["menu" ,"quit"]
-                    }
-                ]).then(function(answers){
-                    if(answers.search === "menu"){
-                        begin();
-                    } else{
-                        connection.end();
-                    }
-                })
+                menuExit();
                     
             });
         });
@@ -283,20 +220,7 @@ addDepartment = function(){
         connection.query(employee,[answers.depname], function(err, res){
             if (err) throw err;
 
-                inquirer.prompt([
-                    {
-                        name: "search",
-                        type: "list",
-                        message: "Would you like to do something else, or exit?",
-                        choices: ["menu" ,"quit"]
-                    }
-                ]).then(function(answers){
-                    if(answers.search === "menu"){
-                        begin();
-                    } else{
-                        connection.end();
-                    }
-                })
+                menuExit();
                 
         });
     });
@@ -334,26 +258,30 @@ changeRole = function(){
                 connection.query(newRole, [answer.role, answer.who], function (err, res){
                     if (err) throw err;
                         
-                    inquirer.prompt([
-                        {
-                            name: "search",
-                            type: "list",
-                            message: "Would you like to do something else, or exit?",
-                            choices: ["menu" ,"quit"]
-                        }
-                    ]).then(function(answers){
-                        if(answers.search === "menu"){
-                            begin();
-                        } else{
-                            connection.end();
-                        }
-                    })
+                    menuExit();
                 })
             })
         })
     })
 
 }
+
+menuExit = function(){
+    inquirer.prompt([
+        {
+            name: "search",
+            type: "list",
+            message: "Would you like to do something else, or exit?",
+            choices: ["menu" ,"quit"]
+        }
+    ]).then(function(answers){
+        if(answers.search === "menu"){
+            begin();
+        } else{
+            connection.end();
+        }
+    })
+};
 
 /////////////////////* TO DO */////////////////////////
 
