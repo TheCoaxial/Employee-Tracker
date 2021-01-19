@@ -16,6 +16,7 @@
   
   ## Usage
   Follow the prompts
+  ![](Demo.gif)
 
   ## License
   This project uses the MIT License 
