@@ -1,7 +1,7 @@
 
 const mysql = require('mysql');
 const inquirer = require('inquirer');
-const conTable = require('console.table');
+const  conTable  = require('console.table');
 
 
 // Creating connection with db
@@ -221,7 +221,7 @@ changeRole = function(){
     //Grabbing data
     connection.query("SELECT * FROM employee", function(err, emp){
         if(err) throw err;
-        
+
         //Grabbing data
         connection.query("SELECT * FROM role", function(err, roles){
             if(err) throw err;
@@ -254,3 +254,10 @@ changeRole = function(){
     })
 
 }
+
+/////////////////////* TO DO */////////////////////////
+
+//Add manager table
+//Add sort by manager function
+//Add Delete functions
+//View Dept Budget 
