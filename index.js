@@ -61,19 +61,20 @@ begin = () => {
                     addRole();
                     break;
                 case "View Employees":
-                    // Add Viewemployees function
+                    // Viewemployees function
                     getEmployees();
                     break;
                 case "View Department":
-                    // Add view Department function
+                    // view Department function
                     getDepartments();
                     break;
                 case "View Role":
-                    // Add view role function
+                    // view role function
                     getRoles();
                     break;
                 case "Update Employee Roles":
-                    // Add update employee function
+                    // update employee function
+                    changeRole();
                     break;
                 case "Quit":
                     // Add Quit function
@@ -91,7 +92,7 @@ begin = () => {
 }
 
 getEmployees = function(){
-    //create a function to get employees
+    //function to get employees
     connection.query("SELECT * FROM employee", (err, res) =>{
         if (err) throw err;
         console.table(res)
@@ -101,9 +102,8 @@ getEmployees = function(){
 };
 
 getRoles = function(){
-    //create a function to get roles
-    let queryOne = "SELECT * FROM role";
-    connection.query(queryOne, (err, res) =>{
+    //function to get roles   
+    connection.query("SELECT * FROM role", (err, res) =>{
         if (err) throw err;
         console.table(res)
         begin();
@@ -111,19 +111,20 @@ getRoles = function(){
 };
 
 getDepartments = function(){
-    //Create function to get departments
-    let queryOne = "SELECT * FROM department";
-    connection.query(queryOne, (err, res) =>{
+    //function to get departments
+    connection.query("SELECT * FROM department", (err, res) =>{
         if (err) throw err;
         console.table(res)
         begin();
     })
 };
 
+// Function to add employee
 addEmployee = function(){
+    //Grabbing data from role table
     connection.query("SELECT * FROM role", function (err, roles){
         if (err) throw err;
-
+        // grabbing user input
         inquirer.prompt([
             {
                 name: "firstname",
@@ -143,8 +144,10 @@ addEmployee = function(){
             }
         ]).then(function(answers){
             
+            // build query string
             let employee = `INSERT INTO employee (first_name, last_name, role_id) VALUES (?, ?, ? )`;
             
+            // make query and insert answers as values
             connection.query(employee,[answers.firstname, answers.lastname, answers.job], function(err, res){
                 if (err) throw err;
                 begin();
@@ -154,10 +157,11 @@ addEmployee = function(){
 };
 
 addRole = function(){
+    //Grabbing data
     connection.query("SELECT * FROM department", function (err, department){
         if (err) throw err;
        
-
+        //Gabbing user input
         inquirer.prompt([
             {
                 name: "title",
@@ -177,8 +181,10 @@ addRole = function(){
             }
         ]).then(function(answers){
             
+            //Build query string
             let role = `INSERT INTO role (title, salary, Department_id) VALUES (?, ?, ? )`;
            
+            //Make query and insert answers as values
             connection.query(role, [answers.title, answers.salary, answers.branch], function(err, res){
                 if (err) throw err;
                 begin();
@@ -189,6 +195,7 @@ addRole = function(){
 
 
 addDepartment = function(){
+    //Grabbing user data
     inquirer.prompt([
         {
             name: "depname",
@@ -198,8 +205,10 @@ addDepartment = function(){
         
     ]).then(function(answers){
         
+        //Build query string
         let employee = `INSERT INTO department (name) VALUES ( ? )`;
         
+        //Make query and insert answers as values
         connection.query(employee,[answers.depname], function(err, res){
             if (err) throw err;
             begin();
@@ -208,3 +217,40 @@ addDepartment = function(){
     
 };
 
+changeRole = function(){
+    //Grabbing data
+    connection.query("SELECT * FROM employee", function(err, emp){
+        if(err) throw err;
+        
+        //Grabbing data
+        connection.query("SELECT * FROM role", function(err, roles){
+            if(err) throw err;
+
+            //Grabbing user data
+            inquirer.prompt([
+                {
+                    name: "who",
+                    type: "list",
+                    message: "Which employee's role would you like to update?",
+                    choices: emp.map(emps => ({ name: emps.first_name + emps.last_name, value: emps.id }))
+                },
+                {
+                    name: "role",
+                    type: "list",
+                    message: "What is this employee's new role?",
+                    choices: roles.map(role => ({name: role.title, value: role.id}))
+                }
+            ]).then(function(answer){
+                //Build query string
+                let newRole = `UPDATE employee SET role_id = ? WHERE id = ?`;
+
+                //Make query and update employee table with answers values
+                connection.query(newRole, [answer.role, answer.who], function (err, res){
+                    if (err) throw err;
+                    begin();
+                })
+            })
+        })
+    })
+
+}
