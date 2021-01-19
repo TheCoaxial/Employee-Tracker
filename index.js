@@ -18,6 +18,12 @@ const connection = mysql.createConnection({
 });
 
 // connection.connect goes here
+connection.connect(function(err){
+    if (err) throw err;
+    console.log("Connected as id" + connection.threadId + "\n");
+    connection.end();
+})
+
 
 
 begin = () => {
@@ -73,3 +79,19 @@ begin = () => {
         })
 
 }
+
+getEmployees = function(){
+    //create a function to get employees
+
+};
+
+getRoles = function(){
+    //create a function to get roles
+
+};
+
+getDepartments = function(){
+    //Create function to get departments
+};
+
+
