@@ -21,7 +21,8 @@ const connection = mysql.createConnection({
 connection.connect(function(err){
     if (err) throw err;
     console.log("Connected as id" + connection.threadId + "\n");
-    connection.end();
+    begin();
+    
 })
 
 
@@ -49,6 +50,7 @@ begin = () => {
             switch (answer.doWhat){
                 case "Add Employee":
                     // Add Employee function
+                    addEmployee();
                     break;
                 case "Add Department":
                     // Add Department Function
@@ -58,22 +60,28 @@ begin = () => {
                     break;
                 case "View Employees":
                     // Add Viewemployees function
+                    getEmployees();
                     break;
                 case "View Department":
                     // Add view Department function
+                    getDepartments();
                     break;
                 case "View Role":
                     // Add view role function
+                    getRoles();
                     break;
                 case "Update Employee Roles":
                     // Add update employee function
                     break;
                 case "Quit":
                     // Add Quit function
+                    connection.end();
                     break;
                 default:
                     console.log("default");
+                    connection.end();
                     // repeat quit function
+                    
                     break;
             }
         })
@@ -82,16 +90,63 @@ begin = () => {
 
 getEmployees = function(){
     //create a function to get employees
+    connection.query("SELECT * FROM employee", (err, res) =>{
+        if (err) throw err;
+        console.table(res)
+        begin();
+    })
 
 };
 
 getRoles = function(){
     //create a function to get roles
-
+    let queryOne = "SELECT * FROM role";
+    connection.query(queryOne, (err, res) =>{
+        if (err) throw err;
+        console.table(res)
+        begin();
+    })
 };
 
 getDepartments = function(){
     //Create function to get departments
+    let queryOne = "SELECT * FROM department";
+    connection.query(queryOne, (err, res) =>{
+        if (err) throw err;
+        console.table(res)
+        begin();
+    })
 };
+
+addEmployee = function(){
+    connection.query("SELECT * FROM role", function (err, roles){
+        if (err) throw err;
+
+        inquirer.prompt([
+            {
+                name: "firstname",
+                type: "input",
+                message: "Enter new employee's first name"
+            },
+            {
+                name: "lastname",
+                type: "input",
+                message: "Enter new employee's last name"
+            },
+            {
+                name: "job",
+                type: "list",
+                message: "Select employee's position",
+                choices: roles.map(role =>({name: role.title, value: role.id}))
+            }
+        ]).then(function(answers){
+            let employee = `INSERT INTO employee (first_name, last_name, role_id) VALUES (?, ?, ? )`;
+            connection.query(employee,[answers.firstname, answers.lastname, answers.job], function(err, res){
+                if (err) throw err;
+                begin();
+            });
+        })
+    })
+}
 
 
