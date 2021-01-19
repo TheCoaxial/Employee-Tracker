@@ -54,9 +54,11 @@ begin = () => {
                     break;
                 case "Add Department":
                     // Add Department Function
+                    addDepartment();
                     break;
                 case "Add Role":
                     // Add Role Function
+                    addRole();
                     break;
                 case "View Employees":
                     // Add Viewemployees function
@@ -140,13 +142,69 @@ addEmployee = function(){
                 choices: roles.map(role =>({name: role.title, value: role.id}))
             }
         ]).then(function(answers){
+            
             let employee = `INSERT INTO employee (first_name, last_name, role_id) VALUES (?, ?, ? )`;
+            
             connection.query(employee,[answers.firstname, answers.lastname, answers.job], function(err, res){
                 if (err) throw err;
                 begin();
             });
-        })
-    })
-}
+        });
+    });
+};
 
+addRole = function(){
+    connection.query("SELECT * FROM department", function (err, department){
+        if (err) throw err;
+       
+
+        inquirer.prompt([
+            {
+                name: "title",
+                type: "input",
+                message: "What is the name of the new role?"
+            },
+            {
+                name: "salary",
+                type: "input",
+                message: "What is the salary for this role?"
+            },
+            {
+                name: "branch",
+                type: "list",
+                message: "Select department for new role",
+                choices: department.map(dept =>({name: dept.name, value: dept.id}))
+            }
+        ]).then(function(answers){
+            
+            let role = `INSERT INTO role (title, salary, Department_id) VALUES (?, ?, ? )`;
+           
+            connection.query(role, [answers.title, answers.salary, answers.branch], function(err, res){
+                if (err) throw err;
+                begin();
+            });
+        });
+    });
+};
+
+
+addDepartment = function(){
+    inquirer.prompt([
+        {
+            name: "depname",
+            type: "input",
+            message: "Enter new derpartment's name"
+        }   
+        
+    ]).then(function(answers){
+        
+        let employee = `INSERT INTO department (name) VALUES ( ? )`;
+        
+        connection.query(employee,[answers.depname], function(err, res){
+            if (err) throw err;
+            begin();
+        });
+    });
+    
+};
 
